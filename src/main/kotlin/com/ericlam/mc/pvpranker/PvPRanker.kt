@@ -174,7 +174,7 @@ class PvPRanker : BukkitPlugin() {
                     "score" -> user?.score.toString()
                     "top" -> getTopBoard().indexOfFirst { it.first == p.uniqueId }.takeIf { it >= 0 }?.plus(1)?.toString()
                             ?: NO_DATA
-                    "times" -> DateFormatUtils.format(count.toLong(), "hh:mm:ss").toString()
+                    "times" -> DateFormatUtils.format(count.toLong() * 1000, "hh:mm:ss").toString()
                     else -> "UNKNOWN_PARAMS"
                 }
             }
