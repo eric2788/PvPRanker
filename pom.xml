@@ -44,12 +44,12 @@
         <dependency>
             <groupId>com.ericlam.mc</groupId>
             <artifactId>RankingLib</artifactId>
-            <version>1.0.0</version>
+            <version>1.0.1</version>
         </dependency>
         <dependency>
             <groupId>com.ericlam.mc</groupId>
             <artifactId>KotLib-API</artifactId>
-            <version>0.1.2</version>
+            <version>0.1.3</version>
         </dependency>
     </dependencies>
 
