@@ -18,7 +18,7 @@ import com.ericlam.mc.rankcal.RankData
 import com.ericlam.mc.rankcal.RankDataManager
 import com.ericlam.mc.rankcal.implement.RankingLib
 import me.clip.placeholderapi.expansion.PlaceholderExpansion
-import org.apache.commons.lang.time.DateFormatUtils
+import org.apache.commons.lang.time.DurationFormatUtils
 import org.bukkit.OfflinePlayer
 import org.bukkit.Server
 import org.bukkit.entity.Player
@@ -174,7 +174,7 @@ class PvPRanker : BukkitPlugin() {
                     "score" -> user?.score.toString()
                     "top" -> getTopBoard().indexOfFirst { it.first == p.uniqueId }.takeIf { it >= 0 }?.plus(1)?.toString()
                             ?: NO_DATA
-                    "times" -> DateFormatUtils.format(count.toLong() * 1000, "hh:mm:ss", TimeZone.getDefault()).toString()
+                    "times" -> DurationFormatUtils.formatDuration(count.toLong() * 1000, "HH:mm:ss")
                     else -> "UNKNOWN_PARAMS"
                 }
             }
