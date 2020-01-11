@@ -177,7 +177,7 @@ class PvPRanker : BukkitPlugin() {
     }
 
     override fun onDisable() {
-        rankManager.savePlayerData().get()
+        if (this::rankManager.isInitialized) rankManager.savePlayerData().get()
     }
 
 
