@@ -18,6 +18,7 @@ import com.ericlam.mc.rankcal.RankData
 import com.ericlam.mc.rankcal.RankDataManager
 import com.ericlam.mc.rankcal.implement.RankingLib
 import me.clip.placeholderapi.expansion.PlaceholderExpansion
+import org.apache.commons.lang.time.DateFormatUtils
 import org.bukkit.OfflinePlayer
 import org.bukkit.Server
 import org.bukkit.entity.Player
@@ -44,6 +45,7 @@ class PvPRanker : BukkitPlugin() {
         fun reload() {
             var i = 0
             config.reload()
+            lang.reload()
             val ranks = sortedSetOf(*config.ranks.map { (k, v) -> Ranker(k, v.translateColorCode(), i++) as RankData }.toTypedArray())
             rankManager = api.factory
                     .addPlayers(controller.findAll())
@@ -148,6 +150,10 @@ class PvPRanker : BukkitPlugin() {
 
 
         val papi = object : PlaceholderExpansion() {
+
+            private val NO_DATA
+                get() = lang.getPure("no-data")
+
             override fun getVersion(): String {
                 return this@PvPRanker.description.version
             }
@@ -160,14 +166,15 @@ class PvPRanker : BukkitPlugin() {
 
             override fun onRequest(p: OfflinePlayer?, params: String?): String {
                 p ?: return lang["not-found-player"]
+
                 val rank = rankManager.getRankData(p.uniqueId)
                 val user = rankManager.getPlayerData(p.uniqueId)
                 return when (params?.toLowerCase()) {
-                    "rank" -> rank?.rankDisplay ?: lang["no-data"]
+                    "rank" -> rank?.rankDisplay ?: NO_DATA
                     "score" -> user?.score.toString()
                     "top" -> getTopBoard().indexOfFirst { it.first == p.uniqueId }.takeIf { it >= 0 }?.plus(1)?.toString()
-                            ?: lang["no-data"]
-                    "times" -> count.toString()
+                            ?: NO_DATA
+                    "times" -> DateFormatUtils.format(count.toLong(), "hh:mm:ss").toString()
                     else -> "UNKNOWN_PARAMS"
                 }
             }
