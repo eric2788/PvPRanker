@@ -1,7 +1,11 @@
 countDownSeconds: 86400
+showTop: 15
 calculator: "z-score"
 ranks:
   Silver: "Silver"
   Gold: "Gold"
   Diamond: "Diamond"
   Master: "Master"
+whenKill:
+  player: -10
+  killer: 10

@@ -1,0 +1,6 @@
+name: PvPRanker
+author: Eric Lam
+version: ${project.version}
+api-version: "1.13"
+main: com.ericlam.mc.pvpranker.PvPRanker
+depend: [KotLib, RankingLib, PlaceholderAPI]
