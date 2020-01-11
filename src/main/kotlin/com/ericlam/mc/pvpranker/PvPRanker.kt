@@ -41,10 +41,10 @@ class PvPRanker : BukkitPlugin() {
         val config = manager.getConfig(kClassOf<Config>())
         val lang = manager.getConfig(kClassOf<Lang>())
         val api = RankingLib.getRankAPI()
-        fun reload(){
+        fun reload() {
             var i = 0
             config.reload()
-            val ranks = sortedSetOf(*config.ranks.map { (k,v)-> Ranker(k, v.translateColorCode(), i++) as RankData }.toTypedArray())
+            val ranks = sortedSetOf(*config.ranks.map { (k, v) -> Ranker(k, v.translateColorCode(), i++) as RankData }.toTypedArray())
             rankManager = api.factory
                     .addPlayers(controller.findAll())
                     .registerRanks(ranks)
@@ -54,7 +54,7 @@ class PvPRanker : BukkitPlugin() {
                     .build()
         }
 
-        fun resetRank(){
+        fun resetRank() {
             rankManager.doCalculate(config.calculator).thenCombine(rankManager.savePlayerData()) { map, _ ->
                 info("成功更新 ${map.size} 個數據")
             }.whenComplete { _, ex -> ex?.printStackTrace() }
