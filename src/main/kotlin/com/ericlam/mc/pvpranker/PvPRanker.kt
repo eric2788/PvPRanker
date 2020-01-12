@@ -42,7 +42,18 @@ class PvPRanker : BukkitPlugin() {
         val config = manager.getConfig(kClassOf<Config>())
         val lang = manager.getConfig(kClassOf<Lang>())
         val api = RankingLib.getRankAPI()
+
+
+        fun resetRank() {
+            rankManager.doCalculate(config.calculator).thenCombine(rankManager.savePlayerData()) { map, _ ->
+                info("成功更新 ${map.size} 個數據")
+            }.whenComplete { _, ex -> ex?.printStackTrace() }
+        }
+
+        var count = config.countDownSeconds
+
         fun reload() {
+            cancelTasks()
             var i = 0
             config.reload()
             lang.reload()
@@ -54,24 +65,19 @@ class PvPRanker : BukkitPlugin() {
                         CompletableFuture.runAsync { it.forEach { controller.save { it as Data } } }
                     }
                     .build()
-        }
-
-        fun resetRank() {
-            rankManager.doCalculate(config.calculator).thenCombine(rankManager.savePlayerData()) { map, _ ->
-                info("成功更新 ${map.size} 個數據")
-            }.whenComplete { _, ex -> ex?.printStackTrace() }
-        }
-
-        reload()
-        var count = config.countDownSeconds
-        if (config.countDownSeconds > 0) {
-            schedule(async = true, delay = 5, period = 1) {
-                when {
-                    count > 0 -> count--
-                    count == 0 -> resetRank().also { count = 0 }
+            if (config.countDownSeconds > 0) {
+                schedule(async = true, delay = 5, period = 1) {
+                    when {
+                        count > 0 -> count--
+                        count == 0 -> resetRank().also { count = config.countDownSeconds }
+                    }
                 }
             }
         }
+
+        reload()
+
+
 
         fun getTopBoard(size: Int = rankManager.rankDataMap.size): List<Pair<UUID, Pair<PlayerData?, RankData>>> {
             return rankManager.rankDataMap.asIterable().take(size).map {
