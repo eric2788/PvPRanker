@@ -6,7 +6,7 @@
 
     <groupId>com.ericlam.mc</groupId>
     <artifactId>PvPRanker</artifactId>
-    <version>0.0.5</version>
+    <version>0.0.6</version>
 
     <repositories>
         <repository>

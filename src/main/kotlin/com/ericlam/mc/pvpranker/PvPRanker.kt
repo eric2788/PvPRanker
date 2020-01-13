@@ -54,10 +54,9 @@ class PvPRanker : BukkitPlugin() {
 
         fun reload() {
             cancelTasks()
-            var i = 0
             config.reload()
             lang.reload()
-            val ranks = sortedSetOf(*config.ranks.map { (k, v) -> Ranker(k, v.translateColorCode(), i++) as RankData }.toTypedArray())
+            val ranks = sortedSetOf(*config.ranks.toList().mapIndexed { i, (k, v) -> Ranker(k, v.translateColorCode(), i) as RankData }.toTypedArray())
             rankManager = api.factory
                     .addPlayers(controller.findAll())
                     .registerRanks(ranks)
@@ -228,7 +227,7 @@ class PvPRanker : BukkitPlugin() {
         }
 
         override fun compareTo(other: PlayerData?): Int {
-            return other?.score?.compareTo(score) ?: 1
+            return scores.compareTo(other?.score ?: 0.0)
         }
 
         override fun getScore(): Double {
